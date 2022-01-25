@@ -24,7 +24,7 @@ export default class ImigesApiService {
     };
     try {
       const response = await axios.get(BASE_URL, options);
-      if (response.data.hits.length === 0) {
+      if (response.data.hits.length === 0 && response.data.totalHits === 0) {
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.',
         );

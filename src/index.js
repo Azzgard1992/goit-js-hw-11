@@ -26,12 +26,25 @@ function onSubmit(e) {
     return Notiflix.Notify.failure('Please enter something');
   }
   imigesApiService.resetPage();
-  imigesApiService.fetchImiges().then(appendGalleryMurkup);
-  refs.button.classList.remove('is-hidden');
+  imigesApiService.fetchImiges().then(data => {
+    Notiflix.Notify.info(`Hooray! We found ${data.totalHits} images.`);
+    if (data.totalHits < 40) {
+      appendGalleryMurkup(data);
+    } else {
+      refs.button.classList.remove('is-hidden');
+      appendGalleryMurkup(data);
+    }
+  });
 }
 
 function onLoadMore() {
-  imigesApiService.fetchImiges().then(appendGalleryMurkup);
+  imigesApiService.fetchImiges().then(data => {
+    if (data.hits.length < 40) {
+      Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+      refs.button.classList.add('is-hidden');
+    }
+    appendGalleryMurkup(data);
+  });
   refs.button.classList.add('is-hidden');
   refs.button.classList.remove('is-hidden');
 }
